@@ -1,15 +1,16 @@
-const ship = new Ship('Titanic');
-
-
-function Ship(name){
-    this.startingPort = 'Hull';
+function Ship(port) {
+  this.startingPort = port;
+  this.currentPort = port;
 };
 
-Ship.prototype ={
-    setSail: function() {
-        this.startingPort = undefined;
-    },
-
+Ship.prototype = {
+  setSail: function () {
+    this.startingPort = null;
+    this.currentPort = null;
+  },
+  dock(port) {
+    this.currentPort = port;
+  },
 };
 
 module.exports = Ship;
