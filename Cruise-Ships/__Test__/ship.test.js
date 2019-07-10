@@ -13,7 +13,6 @@ describe('ship', () => {
     expect(ship.startingPort).toBe(port);
   });
   it('can set sail', () => {
-    const port = undefined;
     const ship = new Ship(Port);
 
     ship.setSail();
