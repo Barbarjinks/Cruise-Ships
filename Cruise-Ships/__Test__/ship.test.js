@@ -1,31 +1,58 @@
 /* globals describe it expect */
 const Ship = require('../src/Ship.js');
 const Port = require('../src/Port.js');
+const Itinerary = require('../src/Itinerary');
 
 describe('ship', () => {
   it('can be instantiated', () => {
-    expect(new Ship()).toBeInstanceOf(Object);
+    const port = new Port('Hull');
+    const itinerary = new Itinerary([port]);
+    const ship = new Ship(itinerary);
+
+    expect(ship).toBeInstanceOf(Object);
   });
   it('Has a starting point', () => {
     const port = new Port('Hull');
-    const ship = new Ship(port);
+    const itinerary = new Itinerary([port]);
+    const ship = new Ship(itinerary);
 
-    expect(ship.startingPort).toBe(port);
+    expect(ship.currentPort).toBe(port);
   });
   it('can set sail', () => {
-    const ship = new Ship(Port);
-
+    const hull = new Port('Hull');
+    const calais = new Port('Calais');
+    const itinerary = new Itinerary([hull, calais]);
+    const ship = new Ship(itinerary);
     ship.setSail();
 
-    expect(ship.startingPort).toBeFalsy();
+    expect(ship.currentPort).toBeFalsy();
   });
   it('can dock at a different port', () => {
     const hull = new Port('Hull');
-    const ship = new Ship(hull);
-
     const calais = new Port('Calais');
+    const itinerary = new Itinerary([hull, calais]);
+    const ship = new Ship(itinerary);
+    ship.setSail();
     ship.dock(calais);
 
     expect(ship.currentPort).toBe(calais);
+  });
+  it('gets added to port on instantiation', () => {
+    const hull = new Port('Hull');
+    const itinerary = new Itinerary([hull]);
+    const ship = new Ship(itinerary);
+
+    expect(hull.ships).toContain(ship);
+  });
+  it('can\'t sail further than its itinerary', ()=> {
+    const hull = new Port('Hull');
+    const calais = new Port('Calais');
+    const itinerary = new Itinerary([hull, calais]);
+    const ship = new Ship(itinerary);
+
+    ship.setSail();
+    ship.dock();
+
+    expect(() => ship.setSail()).toThrowError('End of itinerary reached');
   });
 });
