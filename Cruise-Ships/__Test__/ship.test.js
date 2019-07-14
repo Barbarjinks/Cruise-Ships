@@ -26,6 +26,8 @@ describe('ship', () => {
     ship.setSail();
 
     expect(ship.currentPort).toBeFalsy();
+
+    expect(hull.ships).not.toContain(ship);
   });
   it('can dock at a different port', () => {
     const hull = new Port('Hull');
@@ -33,9 +35,9 @@ describe('ship', () => {
     const itinerary = new Itinerary([hull, calais]);
     const ship = new Ship(itinerary);
     ship.setSail();
-    ship.dock(calais);
-
+    ship.dock();
     expect(ship.currentPort).toBe(calais);
+    expect(calais.ships).toContain(ship);
   });
   it('gets added to port on instantiation', () => {
     const hull = new Port('Hull');
